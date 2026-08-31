@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-short
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: queue-short
+
+  template:
+    metadata:
+      labels:
+        app: queue-short
+
+    spec:
+      containers:
+        - name: queue-short
+          image: frappe/erpnext:v16.33.0
+
+          command:
+            - bench
+            - worker
+            - --queue
+            - short
+
+          envFrom:
+            - configMapRef:
+                name: erpnext-config
+            - secretRef:
+                name: erpnext-secret
