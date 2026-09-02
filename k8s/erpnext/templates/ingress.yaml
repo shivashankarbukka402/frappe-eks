@@ -6,9 +6,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/upstream-vhost: "erpnext.local"
 
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header X-Frappe-Site-Name erpnext.local;
 spec:
   ingressClassName: nginx
 
