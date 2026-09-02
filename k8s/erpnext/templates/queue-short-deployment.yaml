@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: queue-short
-          image: frappe/erpnext:v16.33.0
+          image: shiva9828/frappe-queue-short:v16.33.0
 
           command:
             - bench

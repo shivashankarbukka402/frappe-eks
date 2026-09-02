@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: queue-long
-          image: frappe/erpnext:v16.33.0
+          image: shiva9828/frappe-queue-long:v16.33.0
 
           command:
             - bench

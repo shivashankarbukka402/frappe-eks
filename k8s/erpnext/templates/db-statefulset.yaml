@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: erpnext-db
+
+spec:
+  serviceName: erpnext-db
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: erpnext-db
+
+  template:
+    metadata:
+      labels:
+        app: erpnext-db
+
+    spec:
+      containers:
+        - name: mariadb
+          image: shiva9828/frappe-db:v11.8
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: mysql
+              containerPort: 3306
+
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: erpnext-secret
+                  key: mariadb-root-password
+
+            - name: MARIADB_DATABASE
+              value: frappe
+
+            - name: MARIADB_USER
+              value: frappe
+
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: erpnext-secret
+                  key: mariadb-password
+
+          volumeMounts:
+            - name: mariadb-data
+              mountPath: /var/lib/mysql
+
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mariadb-admin ping \
+                    -h 127.0.0.1 \
+                    -u root \
+                    -p"$MARIADB_ROOT_PASSWORD"
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mariadb-admin ping \
+                    -h 127.0.0.1 \
+                    -u root \
+                    -p"$MARIADB_ROOT_PASSWORD"
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 5
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mariadb-data
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: gp3
+
+        resources:
+          requests:
+            storage: 20Gi

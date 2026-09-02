@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: frappe/erpnext:v16.33.0
+          image: shiva9828/frappe-frontend:v16.33.0
           imagePullPolicy: IfNotPresent
 
           ports:

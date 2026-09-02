@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: redis-queue
-          image: redis:6.2-alpine
+          image: shiva9828/frappe-redis-queue:v6.2-alpine
 
           ports:
             - containerPort: 6379

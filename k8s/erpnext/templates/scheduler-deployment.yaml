@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: scheduler
-          image: frappe/erpnext:v16.33.0
+          image: shiva9828/frappe-scheduler:v16.33.0
 
           command:
             - bench
