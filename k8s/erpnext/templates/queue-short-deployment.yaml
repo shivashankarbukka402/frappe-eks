@@ -4,29 +4,31 @@ metadata:
   name: queue-short
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: queue-short
-
   template:
     metadata:
       labels:
         app: queue-short
-
     spec:
       containers:
         - name: queue-short
           image: shiva9828/frappe-queue-short:v16.33.0
-
           command:
             - bench
             - worker
             - --queue
             - short
-
           envFrom:
             - configMapRef:
                 name: erpnext-config
             - secretRef:
                 name: erpnext-secret
+          volumeMounts:
+            - name: sites
+              mountPath: /home/frappe/frappe-bench/sites
+      volumes:
+        - name: sites
+          persistentVolumeClaim:
+            claimName: sites-pvc
