@@ -28,6 +28,10 @@ spec:
             - secretRef:
                 name: erpnext-secret
 
+          volumeMounts:
+            - name: sites
+              mountPath: /home/frappe/frappe-bench/sites
+
           resources:
             requests:
               cpu: "250m"
@@ -35,3 +39,8 @@ spec:
             limits:
               cpu: "500m"
               memory: "1Gi"
+
+      volumes:
+        - name: sites
+          persistentVolumeClaim:
+            claimName: sites-pvc
