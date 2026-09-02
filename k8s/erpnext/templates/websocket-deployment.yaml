@@ -4,30 +4,31 @@ metadata:
   name: websocket
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: websocket
-
   template:
     metadata:
       labels:
         app: websocket
-
     spec:
       containers:
         - name: websocket
           image: shiva9828/frappe-websocket:v16.33.0
-
           command:
             - node
             - /home/frappe/frappe-bench/apps/frappe/socketio.js
-
           ports:
             - containerPort: 9000
-
           envFrom:
             - configMapRef:
                 name: erpnext-config
             - secretRef:
                 name: erpnext-secret
+          volumeMounts:
+            - name: sites
+              mountPath: /home/frappe/frappe-bench/sites
+      volumes:
+        - name: sites
+          persistentVolumeClaim:
+            claimName: sites-pvc
